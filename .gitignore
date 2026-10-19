@@ -1,0 +1,9 @@
+git 
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/git 
+/playwright/.cache/
+/playwright/.auth/
+
