@@ -6,19 +6,46 @@ test('download file', async ({ page }) => {
 
     const [download] = await Promise.all([
         page.waitForEvent('download'),
-     page.getByRole('button', { name: 'Download File' }).click()
+        page.getByRole('button', { name: 'Download File' }).click()
     ])
     expect(download.suggestedFilename()).toContain(`${download.suggestedFilename()}`);
 
-    const downloadPath="Downloads/sample.txt";
+    const downloadPath = "Downloads/sample.txt";
     await download.saveAs(downloadPath);
 
-    const fileExists=fs.existsSync(downloadPath);
+    const fileExists = fs.existsSync(downloadPath);
     await expect(fileExists).toBeTruthy();
 
-   /*  if(fileExists){
-        fs.unlinkSync(downloadPath);
-    } */
+    /*  if(fileExists){
+         fs.unlinkSync(downloadPath);
+     } */
+
+
+})
+
+test('slider validations', async ({ page }) => {
+
+    await page.goto('https://sdetqa.vercel.app/autoplay');
+    const slider1 = page.locator('div#slider-range span').nth(0);
+    const slider2 = page.locator('div#slider-range span').nth(1);
+    const sliderText = page.locator('input#amount');
+
+    //
+    await slider1.focus();
+    await page.keyboard.press('Home');
+    for (let i = 0; i < 100; i++) {
+        await page.keyboard.press('ArrowRight');
+    }
+
+    await slider2.focus();
+    await page.keyboard.press('End');
+    for (let i = 0; i < 200; i++) {
+        await page.keyboard.press('ArrowLeft');
+    }
+    expect(await page.locator('input#amount').innerText()).toContain('300');
+    expect(await page.locator('input#amount').innerText()).toContain('100');
+
+    await page.evaluate(() => { window.scrollTo(0, document.body.scrollHeight) });
 
 
 })
