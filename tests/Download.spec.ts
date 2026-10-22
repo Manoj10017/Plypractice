@@ -8,13 +8,13 @@ test('download file', async ({ page }) => {
         page.waitForEvent('download'),
         page.getByRole('button', { name: 'Download File' }).click()
     ])
-    expect(download.suggestedFilename()).toContain(`${download.suggestedFilename()}`);
+    await expect(download.suggestedFilename()).toContain(`${download.suggestedFilename()}`);
 
     const downloadPath = "Downloads/sample.txt";
     await download.saveAs(downloadPath);
 
     const fileExists = fs.existsSync(downloadPath);
-    await expect(fileExists).toBeTruthy();
+    await expect(fileExists).toBeTruthy({timeout: 7000});
 
     /*  if(fileExists){
          fs.unlinkSync(downloadPath);
@@ -48,4 +48,50 @@ test('slider validations', async ({ page }) => {
     await page.evaluate(() => { window.scrollTo(0, document.body.scrollHeight) });
 
 
+})
+
+test('Lazy loading', async ({ page }) => {
+
+    await page.goto('https://www.booksbykilo.in/children-books');
+    let previousHeight = 0;
+    while (true) {
+        page.evaluate(() => {
+            window.scrollTo(0, document.body.scrollHeight);
+        });
+        await page.waitForTimeout(2000);
+
+
+        let currentHeight = await page.evaluate(() => {
+            return document.body.scrollHeight;
+
+        })
+        console.log(currentHeight);
+        if (previousHeight === currentHeight) {
+            break
+        }
+        previousHeight = currentHeight;
+    }
+
+
+
+
+
+
+
+})
+
+test('frame locator', async ({ page }) => {
+
+    await page.goto('https://ui.vision/demo/webtest/frames/');
+    let frameCount = page.frames();
+    let totalFarmaes = frameCount.length;
+    console.log(totalFarmaes);
+
+    let firstFrame=page.frame({url:'https://ui.vision/demo/webtest/frames/frame_1.html'});
+    expect(firstFrame).toBeTruthy();
+
+
+   
+
+   
 })

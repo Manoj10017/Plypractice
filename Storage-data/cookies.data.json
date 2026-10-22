@@ -1,0 +1,18 @@
+[
+  {
+    "email": "vithal@example.com",
+    "pass": "test123",
+    "isValid": "valid"
+    
+  },
+  {
+    "email": "ssdddd",
+    "pass": "sssssssss",
+    "isValid": "invalid"
+  
+  },{
+    "email": " ",
+    "pass": " ",
+    "isValid": "invalid"
+  }
+]
